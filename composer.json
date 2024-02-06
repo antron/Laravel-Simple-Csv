@@ -1,0 +1,16 @@
+{
+    "name": "antron/LaraCsv",
+    "authors": [
+        {
+            "name": "antron"
+        }
+    ],
+    "autoload": {
+        "classmap": [
+            "src"
+        ],
+        "psr-4": {
+            "Antron\\LaraCsv\\": "src/"
+        }
+    }
+}
