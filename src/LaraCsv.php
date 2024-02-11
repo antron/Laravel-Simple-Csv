@@ -9,10 +9,8 @@ namespace Antron\LaraCsv;
 /**
  * LaraCsv.
  */
-class LaraCsv
+readonly class LaraCsv
 {
-    public $my_class;
-
     /**
      * Delimiter.
      *
@@ -34,6 +32,11 @@ class LaraCsv
      */
     public bool $header;
 
+    /**
+     * Return Code.
+     *
+     * @var string
+     */
     public string $returncode;
 
     /**
@@ -61,9 +64,16 @@ class LaraCsv
     {
         return LaraCsvHelper::read($this);
     }
-    public function create(): array
+
+    /**
+     * Create.
+     *
+     * @param mix $eloquent_model
+     * @return array
+     */
+    public function create($eloquent_model): array
     {
-        return LaraCsvHelper::create($this);
+        return LaraCsvHelper::create($this, $eloquent_model);
     }
 
     /**

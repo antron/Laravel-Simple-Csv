@@ -26,7 +26,6 @@ class LaraCsvHelper
         $file = self::getFileObject($options);
 
         if ($options->header) {
-
             $header = $file->current();
 
             foreach ($file as $line) {
@@ -34,6 +33,7 @@ class LaraCsvHelper
             }
 
             array_shift($csvs);
+
         } else {
             foreach ($file as $line) {
                 $csvs[] =  $line;
@@ -71,18 +71,21 @@ class LaraCsvHelper
         foreach ($array as $cells) {
             $string .= implode($options->delimiter, $cells) . $options->returncode;
         }
+
         file_put_contents($options->file_path, $string);
     }
 
-    public static function create(LaraCsv $options): array
+    public static function create(LaraCsv $options, $eloquent_model): array
     {
         $models = [];
+
         foreach (self::read($options) as $inputs) {
-            $model = new $options->my_class;
+            $model = new $eloquent_model;
 
             $model->fill($inputs);
 
             $model->save();
+
             $models[] = $model;
         }
 
