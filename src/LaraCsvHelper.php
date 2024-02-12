@@ -112,13 +112,11 @@ class LaraCsvHelper
         return $models;
     }
 
-    public static function update(LaraCsv $options, $eloquent_model): array
+    public static function update(LaraCsv $options, $eloquent_model, string $key): array
     {
         $models = [];
 
         $csv = self::read($options);
-
-        $key = array_shift($csv[0]);
 
         foreach (self::read($options) as $inputs) {
             if (is_null($eloquent_model::find($key))) {

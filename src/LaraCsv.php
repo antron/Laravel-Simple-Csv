@@ -9,7 +9,7 @@ namespace Antron\LaraCsv;
 /**
  * LaraCsv.
  */
-readonly class LaraCsv
+class LaraCsv
 {
     /**
      * Delimiter.
@@ -74,6 +74,17 @@ readonly class LaraCsv
     public function create($eloquent_model): array
     {
         return LaraCsvHelper::create($this, $eloquent_model);
+    }
+
+    /**
+     * Update.
+     *
+     * @param mix $eloquent_model
+     * @return array
+     */
+    public function update($eloquent_model, string $key): array
+    {
+        return LaraCsvHelper::update($this, $eloquent_model, $key);
     }
 
     /**
