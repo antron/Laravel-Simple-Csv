@@ -21,26 +21,39 @@ class LaraCsvHelper
      */
     public static function read(LaraCsv $options): array
     {
-        $csvs = [];
-
         $file = self::getFileObject($options);
 
         if ($options->header) {
-            $header = $file->current();
-
-            foreach ($file as $line) {
-                $csvs[] = array_combine($header, $line);
-            }
-
-            array_shift($csvs);
-
-        } else {
-            foreach ($file as $line) {
-                $csvs[] =  $line;
-            }
+            return self::getArrayWithHead($file);
         }
 
-        return $csvs;
+        return self::getArray($file);
+    }
+
+    private static function getArray($file)
+    {
+        $csv = [];
+
+        foreach ($file as $line) {
+            $csvs[] =  $line;
+        }
+
+        return $csv;
+    }
+
+    private static function getArrayWithHead($file)
+    {
+        $csv = [];
+
+        $header = $file->current();
+
+        foreach ($file as $line) {
+            $csv[] = array_combine($header, $line);
+        }
+
+        array_shift($csv);
+
+        return $csv;
     }
 
     /**
@@ -64,7 +77,14 @@ class LaraCsvHelper
         return $file;
     }
 
-    public static function write(LaraCsv $options, $array)
+    /**
+     * Write.
+     *
+     * @param LaraCsv $options
+     * @param array $array
+     * @return void
+     */
+    public static function write(LaraCsv $options, array $array): void
     {
         $string = '';
 
@@ -87,6 +107,29 @@ class LaraCsvHelper
             $model->save();
 
             $models[] = $model;
+        }
+
+        return $models;
+    }
+
+    public static function update(LaraCsv $options, $eloquent_model): array
+    {
+        $models = [];
+
+        $csv = self::read($options);
+
+        $key = array_shift($csv[0]);
+
+        foreach (self::read($options) as $inputs) {
+            if (is_null($eloquent_model::find($key))) {
+                $model = new $eloquent_model;
+
+                $model->fill($inputs);
+
+                $model->save();
+
+                $models[] = $model;
+            }
         }
 
         return $models;
